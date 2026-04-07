@@ -211,16 +211,32 @@ announcer.color("red")
 screen = turtle.Screen()
 screen.tracer(0)
 
-drawBoard()
+# drawBoard()
 
-board=[]
-for i in range(3):
-    row=[]
-    for j in range(3):
-        row.append(" ")
-    board.append(row)
+# board=[]
+# for i in range(3):
+#     row=[]
+#     for j in range(3):
+#         row.append(" ")
+#     board.append(row)
 
-activate(functions)
-screen.listen()
+# activate(functions)
+# screen.listen()
+import os
 
+if __name__ == "__main__":
+    drawBoard()
+
+    board=[]
+    for i in range(3):
+        row=[]
+        for j in range(3):
+            row.append(" ")
+        board.append(row)
+
+    if os.getenv("CI"):
+        print("Running in CI mode - skipping UI")
+    else:
+        activate(functions)
+        screen.listen()
 
