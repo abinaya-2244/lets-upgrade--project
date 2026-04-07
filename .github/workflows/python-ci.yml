@@ -25,9 +25,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install flake8 autopep8
+          pip install flake8 autopep8 pytest
 
-      # 🔍 Lint check (will NOT fail pipeline)
+      # 🔍 Lint check (non-blocking)
       - name: Run Lint Check
         run: flake8 . || true
 
@@ -35,7 +35,7 @@ jobs:
       - name: Auto Format Code
         run: autopep8 --in-place --aggressive --aggressive *.py
 
-      # 🔄 Commit formatted code back to repo
+      # 🔄 Commit formatted code
       - name: Commit formatted code
         run: |
           git config --global user.name "github-actions"
@@ -44,6 +44,7 @@ jobs:
           git commit -m "auto format code [CI]" || echo "No changes"
           git push
 
-      # ✅ Run script (basic validation)
-      - name: Run Python Script
-        run: python "tic tac toe game.py"
+      # 🧪 Run tests (MAIN STEP)
+      - name: Run Tests
+        run: pytest
+
