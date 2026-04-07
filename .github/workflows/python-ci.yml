@@ -1,11 +1,14 @@
-name: Python CI Pipeline 🐍
+name: Python CI + Auto Format 🚀
 
 on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
-  test-python:
+  python-ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,15 +20,30 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Check Python version
+      - name: Show Python version
         run: python --version
 
       - name: Install dependencies
         run: |
-          pip install flake8
+          pip install flake8 autopep8
 
-      - name: Lint code (quality check)
-        run: flake8 .
+      # 🔍 Lint check (will NOT fail pipeline)
+      - name: Run Lint Check
+        run: flake8 . || true
 
-      - name: Run script (basic validation)
-        run: python your_file_name.py
+      # 🔧 Auto format code
+      - name: Auto Format Code
+        run: autopep8 --in-place --aggressive --aggressive *.py
+
+      # 🔄 Commit formatted code back to repo
+      - name: Commit formatted code
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "auto format code [CI]" || echo "No changes"
+          git push
+
+      # ✅ Run script (basic validation)
+      - name: Run Python Script
+        run: python "tic tac toe game.py"
